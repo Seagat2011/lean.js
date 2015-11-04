@@ -19,6 +19,8 @@ VERSION:
     - Added LEAN Ouput Window
     1.0.0.2
     - Added LEAN Source Editor with built-in syntax highlighter
+    1.0.0.3
+    - Added firefox compatibility
 
 STYLEGUIDE: 
     http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
@@ -55,7 +57,7 @@ BUGFIX:
 <link rel='stylesheet' media='all' href='editor/theme/chrome.css'>
 <link rel='stylesheet' media='all' href='editor/main.css'>
 <script src='editor/mode/lean_highlight_rules.js'></script>
-<script src='editor/main.js' defer></script>
+<script src='editor/main.js'></script>
 </head>
 <body onload='loader()'>
 <p>
@@ -65,18 +67,9 @@ BUGFIX:
 <br>
 <br>(Sourcecode editor developed in Google Chrome &amp; added by Michelle Antonello 10/31/15)
 <br>
-<div id=__container__>
-<div id=__rows__></div>
-<div id=__editor__>
-<div  class=code id=te spellcheck="false" autocapitalize="off" autocorrect="off" contenteditable="true" style="
-   -webkit-text-fill-color:rgba(0,0,0,0); 
-    color:rgba(0,0,0,0.2);
-    background:rgba(0,0,0,0); z-index:1; 
-    border:1px solid gray;"></div>
-<div class=code id=de spellcheck="false" autocapitalize="off" autocorrect="off"></div>
-</div>
-</div>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<textarea id=txtarea0></textarea>
+
 <br><input id=btnTranslate type=button value='click to translate' onclick='translatorTool()'/>
 <br>
 <br><textarea id=srcTranslated class=cssTranslated placeholder='Author - Seagat2011 Copyright (c) 2015 - All Rights Reserved'></textarea>
@@ -85,6 +78,7 @@ BUGFIX:
 <footer>
 
 <script type="text/javascript" charset="utf-8">
+
 var file_name = 'test.lean'
 function clear_all(){
    srcTranslated.value = ''
@@ -163,9 +157,11 @@ Module.postRun = [ /* BUGFIX */
 <!-- <script src="https://leanprover.github.io/lean.js/lean.js" type="text/javascript" charset="utf-8"></script>-->
 <script src="lean.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
+
 function loader(){
-    if(editor.getLines()==""){
-        editor.setLine(0,"import data.nat\nopen nat\ndefinition m_plus_n ( m n : nat ) : nat := m + n\nprint m_plus_n\neval m_plus_n 3 6")
+    srcCode = BLACK_SPADE_EDITOR.fromTextArea("txtarea0")
+    if(srcCode.getLines()==""){
+        srcCode.setLine(0,"import data.nat\nopen nat\ndefinition m_plus_n ( m n : nat ) : nat := m + n\nprint m_plus_n\neval m_plus_n 3 6")
     }
 }
 function translatorTool(){
@@ -189,7 +185,7 @@ function translatorTool(){
     preview( '-------------- R U N N I N G --------------' )
     preview( '-------------------------------------------' )
     preview( 'Loading source into file test.lean and Writing file to virtual FS...' ); startTimer()
-    testfile = editor.getLines().join('\n')
+    testfile = srcCode.getLines().join('\n')
     preview( "..." )
     FS.writeFile( file_name, testfile, { encoding: 'utf8' } )
     preview( '  ..test.lean file written.', checkTimer() )

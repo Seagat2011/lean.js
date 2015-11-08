@@ -5,3 +5,7 @@ open nat
 definition m_plus_n ( m n : nat ) : nat := m + n
 print m_plus_n
 eval m_plus_n 3 6
+
+BUGFIX
+    SYMP: HTML tags unescaped
+    SOLU:
